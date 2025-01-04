@@ -1,0 +1,60 @@
+﻿@model List<Permission>
+
+@{
+    ViewData["Title"] = "StudentsPermissions";
+    Layout = "~/Views/Shared/instructorLayout.cshtml";
+ 
+}
+
+<div>
+    <h2 class="items-position">Permissions</h2>
+    @if(Model.Count == 0)
+    {
+        <h3 class="items-position">No permissions at the moment</h3>
+    }
+    
+    @foreach (var p in Model)
+    {
+        <div class="card w-50 mb-3" style="margin-left: 150px">
+            <div class="card-body">
+                <h5 class="card-title">@p.Student.FirstName @p.Student.LastName</h5>
+                <p class="card-text">@p.date </p>
+                <p class="card-text">@p.Type </p>
+                <button class="btn btn-success" onclick="updatePermission(@p.StudentId, '@p.date.ToString("dd-MM-yyyy")', 1)">Approve</button>
+                <button class="btn btn-danger" onclick="updatePermission(@p.StudentId, '@p.date.ToString("dd-MM-yyyy")', 2)">Reject</button>
+
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+
+    function updatePermission(studentId, date, status) {
+        // debugger;
+        // var parsedDate = new Date(date);
+        // console.log(parsedDate);
+         console.log(studentId, date, status);
+        // var requestData = {
+        //     studentId: studentId,
+        //     date: date,
+        //     status: status
+        // };
+        $.ajax({
+            url: '/instructor/UpdatePermission', // URL of the controller action method
+            data: {
+                studentID: studentId,
+                Date: date,
+                Status: status
+            }, // Convert the permission object to a JSON string
+            success: function (response) {
+                // Handle the success response here
+                console.log('Permission received successfully:', response);
+                // Reload the page after successful update
+                location.reload();
+            },
+
+        });
+    }
+
+</script>
